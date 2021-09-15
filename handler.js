@@ -1,91 +1,81 @@
 'use strict';
 const { Engine } = require('json-rules-engine');
-
-const { getAccountInformation }= require('./userlist/user')
+require('colors')
 
 module.exports.handler = async (event) => {
 
   const engine = new Engine()
 
-  const acountCheck = {
-      conditions: {
-        all: [{
-          fact: 'servicedetails',
-          path: '$.service',
-          operator: 'equal',
-          value: 'kuku tv'
-        }]
-      },
-      event: { type: 'service-check' },
-      priority: 10, 
-      onSuccess: async function (event, almanac) {
-        almanac.addRuntimeFact('trueservice', true)
-        const accountId = await almanac.factValue('accountId')
-        const accountInfo = await getAccountInformation(accountId)
-        almanac.addRuntimeFact('accountInfo', accountInfo)
-      },
-      onFailure: function (event, almanac) {
-        almanac.addRuntimeFact('trueservice', false)
+
+  engine.addRule({
+    conditions: {
+      any: [{
+        fact: 'videowatched',
+        operator: 'greaterThanInclusive',
+        value: 1
+      }, {
+        fact: 'assignment',
+        operator: 'greaterThanInclusive',
+        value: 1
+      }]
+    },
+    event: { 
+      type: 'honor-roll',
+      params: {
+        message: 'User made the reward points'
       }
+    },
+    name: 'User Reward Points'
+  })
+
+  function render (message, ruleResult) {
+    if (ruleResult.result) {
+      const detail1 = ruleResult.conditions.any.filter(condition => condition.result === true)
+      .map(condition => {
+        console.log('this is the condition:', condition.factResult)
+        switch (condition.operator) {
+          case 'greaterThanInclusive':
+            return `${condition.fact} of ${condition.factResult} good`
+          default:
+            return ''
+        }
+      }).join(' and ')
+     console.log(`${message} ${detail1}`.green)
     }
-    engine.addRule(acountCheck)
- 
-    const rewardPointRule = {
-      conditions: {
-        any: [{
-          fact: 'accountInfo',
-          path: '$.videoswatched',
-          operator: 'greaterThanInclusive',
-          value: '1'
-        },{
-          fact: 'accountInfo',
-          path: '$.assignment',
-          operator: 'greaterThanInclusive',
-          value: '1'
-        }]
-      },
-      event: { type: 'this-reward-point' },
-      priority: 9 
-    }
-    engine.addRule(rewardPointRule)
-  
-    engine
-      .on('success', async (event, almanac) => {
-        const accountInfo = await almanac.factValue('accountInfo');
-        const accountId = await almanac.factValue('accountId');
-        let videoreward =  accountInfo.videoswatched ? (accountInfo.videoswatched)*5 : 0;
-        let assignmentreward = accountInfo.assignment ? (accountInfo.assignment)*5 : 0;
-        let totalreward = videoreward + assignmentreward;
-        console.log('totalreward:', totalreward)
-        if (totalreward == 2000) {
-          console.log(` Congratulations! ${accountId} (${accountInfo.service}),  have won a gift voucher`);
+    const detail = ruleResult.conditions.any.filter(condition => !condition.result)
+      .map(condition => {
+        switch (condition.operator) {
+          case 'greaterThanInclusive':
+            return `${condition.fact} of ${condition.factResult} was too low`
+          default:
+            return ''
         }
-        if ((totalreward % 500) == 0) {
-          console.log(` Congratulations! ${accountId} (${accountInfo.service}), you are  eligible for a new kuku voucher`);
-        }
+      }).join(' and ')
+    console.log(`${message} ${detail}`.red)
+  }
 
-        if (totalreward == 1000) {
-          console.log(` Congratulations! ${accountId} (${accountInfo.service}),  have unlocked a new avatar`);
-        }
-        if ((totalreward >= 100) && (totalreward % 100)) {
-          console.log(`${accountId} (${accountInfo.service}),  have earned total ${parseInt(totalreward/100)} batches and ${parseInt(totalreward%100)} Points`);
-        }
-        if (totalreward < 100) {
-          console.log(`${accountId} (${accountInfo.service}),  have earned total ${totalreward} points`);
-        }
 
-      })
-      .on('failure', async (event, almanac) => {
-        const accountId = await almanac.factValue('accountId')
-        console.log(`${accountId} did ` + 'NOT' + ` meet conditions for the ${event.type.underline} rule.`)
-      })
-  
+  engine.on('success', (event, almanac, ruleResult) => {
+   
+    almanac.factValue('username').then(username => {
+      render(`${username.bold} succeeded ${ruleResult.name}! ${event.params.message}`, ruleResult)
+    })
+  })
 
-  let facts = { accountId: 'samson', servicedetails: "kuku tv", accountInfo: {} }
-  
-  let results = await engine.run(facts)
-  let values = results['almanac']['factMap'].map(user=> user.accountInfo)
-  console.log('this is result:', values)
 
+  engine.on('failure', (event, almanac, ruleResult) => {
+    almanac.factValue('username').then(username => {
+      render(`${username.bold} failed ${ruleResult.name} - `, ruleResult)
+    })
+  })
+
+  await Promise.all([
+    // engine.run({ videowatched: 2, assignment: 3, username: 'joe' }),
+    // engine.run({ videowatched: 1, assignment: 0, username: 'larry' }),
+    // engine.run({ videowatched: 0, assignment: 1, username: 'jane' }),
+    // engine.run({ videowatched: 0, assignment: 0, username: 'janet' }),
+    // engine.run({ videowatched: 200, assignment: 11, username: 'sarah' }),
+    engine.run(event)
+  ])
  
 };
