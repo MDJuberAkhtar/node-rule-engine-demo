@@ -83,7 +83,9 @@ module.exports.handler = async (event) => {
 
   let facts = { accountId: 'samson', servicedetails: "kuku tv", accountInfo: {} }
   
-  await engine.run(facts)
+  let results = await engine.run(facts)
+  let values = results['almanac']['factMap'].map(user=> user.accountInfo)
+  console.log('this is result:', values)
 
  
 };
