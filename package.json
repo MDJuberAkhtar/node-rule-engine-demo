@@ -4,8 +4,7 @@
   "description": "",
   "main": "handler.js",
   "dependencies": {
-    "colors": "^1.4.0",
-    "colours": "^0.6.0-2",
+ 
     "json-rules-engine": "^6.1.2"
   },
   "devDependencies": {},

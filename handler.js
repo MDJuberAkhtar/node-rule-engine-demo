@@ -7,48 +7,6 @@ module.exports.handler = async (event) => {
 
   const engine = new Engine()
 
-  // function render1 (message, ruleResult) {
-  //   if (ruleResult.result) {
-  //     const detail1 = ruleResult.conditions.any.filter(condition => condition.result === true)
-  //     .map(condition => {
-  //       switch (condition.operator) {
-  //         case 'greaterThanInclusive':
-  //           return ``
-  //       }
-  //     }).join(' and ')
-  //    console.log(`${message} ${detail1}`)
-  //   }
-  //   const detail = ruleResult.conditions.any.filter(condition => !condition.result)
-  //     .map(condition => {
-  //       switch (condition.operator) {
-  //         case 'greaterThanInclusive':
-  //           return ``
-  //       }
-  //     }).join(' and ')
-  //   console.log(`${message} ${detail}`)
-  // }
-
-  // function render (message, ruleResult) {
-  //   if (ruleResult.result) {
-  //     const detail3 = ruleResult.conditions.any.filter(condition => condition.result === true)
-  //     .map(condition => {
-  //       switch (condition.operator) {
-  //         case 'greaterThanInclusive':
-  //           return `you have accumulated total ${condition.factResult} reward points`
-  //       }
-  //     }).join(' and ')
-  //    console.log(`${message} ${detail3}`)
-  //   }
-  //   const detail4 = ruleResult.conditions.any.filter(condition => !condition.result)
-  //     .map(condition => {
-  //       switch (condition.operator) {
-  //         case 'greaterThanInclusive':
-  //           return `you have accumulated total ${condition.factResult} reward points`
-  //       }
-  //     }).join(' and ')
-  //   console.log(`${message} ${detail4}`)
-  // }
-
   const acountCheck = {
       conditions: {
         any: [{
