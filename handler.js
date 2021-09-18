@@ -1,16 +1,9 @@
 'use strict';
 const { Engine } = require('json-rules-engine');
-
 const { getAccountInformation }= require('./userlist/user');
+const Responses = require('./common/API_Responses');
 
 module.exports.handler = async (event) => {
-
-  // new Promise(async(resolve, reject) => {
-
-  //   const accountdata =  await getAccountInformation('jazz');
-  //   console.log('this is account data: ', resolve(accountdata));
-  
-  // });
 
 
   const engine = new Engine()
@@ -36,8 +29,9 @@ module.exports.handler = async (event) => {
       onFailure: function (event, almanac) {
         almanac.addRuntimeFact('trueservice', false)
       }
-    }
-    engine.addRule(acountCheck)
+  }
+  
+  engine.addRule(acountCheck)
  
     const rewardPointRule = {
       conditions: {
@@ -72,7 +66,9 @@ module.exports.handler = async (event) => {
         }
 
         if ((totalreward >= 100) && (totalreward % 100)) {
-          return console.log(`${accountId} ,  have earned total ${parseInt(totalreward/100)} batches and ${parseInt(totalreward%100)} Points`);
+         
+         return console.log(`${accountId} ,  have earned total ${parseInt(totalreward/100)} batches and ${parseInt(totalreward%100)} Points`);
+
         }
 
       })
@@ -82,15 +78,13 @@ module.exports.handler = async (event) => {
         return console.log(`${accountId} ,  have earned total ${accountInfo1.rewardpoint} points`);
       })
   
-      const data = JSON.parse(event.body)
-      // console.log('this is data:', event.body, data)
+  const data = JSON.parse(event.body)
     
-      // let facts = { accountId: data.name, videoswatched: data.video}
 
   let facts = { accountId: data.name, videoswatched: data.video}
   
-  await engine.run(facts)
+  let factResults = await engine.run(facts)
+  console.log('thie is fact result:', factResults.almanac.getResults())
  
-
  
 };
