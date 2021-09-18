@@ -78,8 +78,10 @@ functions:
     layers:
       - {Ref: MyModulesLambdaLayer}
     events:
-      - http: ANY /
-      - http: 'ANY {proxy+}'
+      - http:
+          path: get-user
+          method: POST
+          cors: true
 
   User:
         handler: insertUser/User.handler

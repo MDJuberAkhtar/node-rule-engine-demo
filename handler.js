@@ -1,9 +1,17 @@
 'use strict';
 const { Engine } = require('json-rules-engine');
 
-const { getAccountInformation }= require('./userlist/user')
+const { getAccountInformation }= require('./userlist/user');
 
 module.exports.handler = async (event) => {
+
+  // new Promise(async(resolve, reject) => {
+
+  //   const accountdata =  await getAccountInformation('jazz');
+  //   console.log('this is account data: ', resolve(accountdata));
+  
+  // });
+
 
   const engine = new Engine()
 
@@ -53,29 +61,33 @@ module.exports.handler = async (event) => {
         console.log('totalreward:', totalreward)
         
         if (totalreward == 2000) {
-          return console.log(` Congratulations! ${accountId} (${accountInfo.service}),  have won a gift voucher`);
+          return console.log(` Congratulations! ${accountId} ,  have won a gift voucher`);
         }
         if ((totalreward % 500) == 0 && (totalreward !== 1000)) {
-          return console.log(` Congratulations! ${accountId} (${accountInfo.service}), you are  eligible for a new kuku voucher`);
+          return console.log(` Congratulations! ${accountId} , you are  eligible for a new kuku voucher`);
         }
 
         if (totalreward == 1000) {
-          return console.log(` Congratulations! ${accountId} (${accountInfo.service}),  have unlocked a new avatar and also won a new kuku vaoucher`);
+          return console.log(` Congratulations! ${accountId} ,  have unlocked a new avatar and also won a new kuku vaoucher`);
         }
 
         if ((totalreward >= 100) && (totalreward % 100)) {
-          return console.log(`${accountId} (${accountInfo.service}),  have earned total ${parseInt(totalreward/100)} batches and ${parseInt(totalreward%100)} Points`);
+          return console.log(`${accountId} ,  have earned total ${parseInt(totalreward/100)} batches and ${parseInt(totalreward%100)} Points`);
         }
 
       })
       .on('failure', async (event, almanac) => {
         const accountId = await almanac.factValue('accountId')
         const accountInfo1 = await almanac.factValue('accountInfo');
-        return console.log(`${accountId} (${accountInfo1.service}),  have earned total ${accountInfo1.rewardpoint} points`);
+        return console.log(`${accountId} ,  have earned total ${accountInfo1.rewardpoint} points`);
       })
   
+      const data = JSON.parse(event.body)
+      // console.log('this is data:', event.body, data)
+    
+      // let facts = { accountId: data.name, videoswatched: data.video}
 
-  let facts = { accountId: 'samson', videoswatched: 95, accountInfo: {} }
+  let facts = { accountId: data.name, videoswatched: data.video}
   
   await engine.run(facts)
  

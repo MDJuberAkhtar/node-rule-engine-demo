@@ -200,7 +200,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/node-rule-engine/dev/1631945615141-2021-09-18T06:13:35.141Z/node-rule-engine.zip"
+                "S3Key": "serverless/node-rule-engine/dev/1631975876519-2021-09-18T14:37:56.519Z/node-rule-engine.zip"
               },
               "Handler": "handler.handler",
               "Runtime": "nodejs12.x",
@@ -235,7 +235,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/node-rule-engine/dev/1631945615141-2021-09-18T06:13:35.141Z/node-rule-engine.zip"
+                "S3Key": "serverless/node-rule-engine/dev/1631975876519-2021-09-18T14:37:56.519Z/node-rule-engine.zip"
               },
               "Handler": "insertUser/User.handler",
               "Runtime": "nodejs12.x",
@@ -263,24 +263,24 @@
               "UserLogGroup"
             ]
           },
-          "HelloLambdaVersioneaIopdmDUYwD6FhnRF3bhU6CUaluxpt1kz3ccrtf20": {
+          "HelloLambdaVersionxRjoFCijiwaAAVOJvb9CBS84mHVLB5fGkQ2HznyMk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "HelloLambdaFunction"
               },
-              "CodeSha256": "mDBrJNKNmAOmYNsrhwflid3tzz0ip9aMbG2yBn/qjtI="
+              "CodeSha256": "UJ2r19igkCJWvge4eUItQ7JCIVB41RJN9dVmqbDtFC0="
             }
           },
-          "UserLambdaVersionGHpLD5Mq8yFuOxKBRKUFkorMWgQJPsUZqttD8xlVnM": {
+          "UserLambdaVersionZT6JVgunhA4lBIMpdl2NWo9XP1bPwGdklcpGhq03TE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UserLambdaFunction"
               },
-              "CodeSha256": "mDBrJNKNmAOmYNsrhwflid3tzz0ip9aMbG2yBn/qjtI="
+              "CodeSha256": "UJ2r19igkCJWvge4eUItQ7JCIVB41RJN9dVmqbDtFC0="
             }
           },
           "ApiGatewayRestApi": {
@@ -295,7 +295,7 @@
               "Policy": ""
             }
           },
-          "ApiGatewayResourceProxyVar": {
+          "ApiGatewayResourceGetDashuser": {
             "Type": "AWS::ApiGateway::Resource",
             "Properties": {
               "ParentId": {
@@ -304,7 +304,7 @@
                   "RootResourceId"
                 ]
               },
-              "PathPart": "{proxy+}",
+              "PathPart": "get-user",
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -320,6 +320,51 @@
                 ]
               },
               "PathPart": "create-user",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodGetDashuserOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceGetDashuser"
+              },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -370,59 +415,13 @@
               }
             }
           },
-          "ApiGatewayMethodAny": {
+          "ApiGatewayMethodGetDashuserPost": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
-              "HttpMethod": "ANY",
+              "HttpMethod": "POST",
               "RequestParameters": {},
               "ResourceId": {
-                "Fn::GetAtt": [
-                  "ApiGatewayRestApi",
-                  "RootResourceId"
-                ]
-              },
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "ApiKeyRequired": false,
-              "AuthorizationType": "NONE",
-              "Integration": {
-                "IntegrationHttpMethod": "POST",
-                "Type": "AWS_PROXY",
-                "Uri": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":apigateway:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":lambda:path/2015-03-31/functions/",
-                      {
-                        "Fn::GetAtt": [
-                          "HelloLambdaFunction",
-                          "Arn"
-                        ]
-                      },
-                      "/invocations"
-                    ]
-                  ]
-                }
-              },
-              "MethodResponses": []
-            }
-          },
-          "ApiGatewayMethodProxyVarAny": {
-            "Type": "AWS::ApiGateway::Method",
-            "Properties": {
-              "HttpMethod": "ANY",
-              "RequestParameters": {},
-              "ResourceId": {
-                "Ref": "ApiGatewayResourceProxyVar"
+                "Ref": "ApiGatewayResourceGetDashuser"
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
@@ -502,7 +501,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1631945609292": {
+          "ApiGatewayDeployment1631975870746": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -511,9 +510,9 @@
               "StageName": "dev"
             },
             "DependsOn": [
+              "ApiGatewayMethodGetDashuserOptions",
               "ApiGatewayMethodCreateDashuserOptions",
-              "ApiGatewayMethodAny",
-              "ApiGatewayMethodProxyVarAny",
+              "ApiGatewayMethodGetDashuserPost",
               "ApiGatewayMethodCreateDashuserPost"
             ]
           },
@@ -615,13 +614,13 @@
           "HelloLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersioneaIopdmDUYwD6FhnRF3bhU6CUaluxpt1kz3ccrtf20"
+              "Ref": "HelloLambdaVersionxRjoFCijiwaAAVOJvb9CBS84mHVLB5fGkQ2HznyMk"
             }
           },
           "UserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UserLambdaVersionGHpLD5Mq8yFuOxKBRKUFkorMWgQJPsUZqttD8xlVnM"
+              "Ref": "UserLambdaVersionZT6JVgunhA4lBIMpdl2NWo9XP1bPwGdklcpGhq03TE"
             }
           },
           "ServiceEndpoint": {
@@ -745,10 +744,30 @@
         },
         "events": [
           {
-            "http": "ANY /"
-          },
-          {
-            "http": "ANY {proxy+}"
+            "http": {
+              "path": "get-user",
+              "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
           }
         ],
         "name": "node-rule-engine-dev-hello",
@@ -757,7 +776,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "HelloLambdaVersioneaIopdmDUYwD6FhnRF3bhU6CUaluxpt1kz3ccrtf20"
+        "versionLogicalId": "HelloLambdaVersionxRjoFCijiwaAAVOJvb9CBS84mHVLB5fGkQ2HznyMk"
       },
       "User": {
         "handler": "insertUser/User.handler",
@@ -798,7 +817,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "UserLambdaVersionGHpLD5Mq8yFuOxKBRKUFkorMWgQJPsUZqttD8xlVnM"
+        "versionLogicalId": "UserLambdaVersionZT6JVgunhA4lBIMpdl2NWo9XP1bPwGdklcpGhq03TE"
       }
     },
     "configValidationMode": "warn",
@@ -841,14 +860,14 @@
           "serverless.yml"
         ],
         "artifact": "/home/mobiotics_akhtar/akhtar/node-rule-engine/.serverless/node-rule-engine.zip",
-        "artifactDirectoryName": "serverless/node-rule-engine/dev/1631945615141-2021-09-18T06:13:35.141Z"
+        "artifactDirectoryName": "serverless/node-rule-engine/dev/1631975876519-2021-09-18T14:37:56.519Z"
       }
     },
     "isDashboardMonitoringPreconfigured": false,
     "artifact": "/home/mobiotics_akhtar/akhtar/node-rule-engine/.serverless/node-rule-engine.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/node-rule-engine/dev/1631945615141-2021-09-18T06:13:35.141Z",
+    "artifactDirectoryName": "serverless/node-rule-engine/dev/1631975876519-2021-09-18T14:37:56.519Z",
     "artifact": "node-rule-engine.zip"
   }
 }
