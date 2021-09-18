@@ -32,8 +32,8 @@ provider:
 
 
 
-# plugins:
-#   - serverless-offline
+plugins:
+  - serverless-offline
 
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
@@ -63,23 +63,33 @@ provider:
 #  exclude:
 #    - exclude-me.js
 #    - exclude-me-dir/**
-# layers:
-#   MyModules:
-#     path: layers/my-layers
-#     compatibleRuntimes:
-#       - nodejs12.x
-#     package:
-#       include:
-#         - node_modules/**
+layers:
+  MyModules:
+    path: layers/my-layers
+    compatibleRuntimes:
+      - nodejs12.x
+    package:
+      include:
+        - node_modules/**
 
 functions:
   hello:
     handler: handler.handler
-    # layers:
-    #   - {Ref: MyModulesLambdaLayer}
+    layers:
+      - {Ref: MyModulesLambdaLayer}
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
+
+  User:
+        handler: insertUser/User.handler
+        layers:
+          - {Ref: MyModulesLambdaLayer}
+        events:
+          - http:
+              path: create-user
+              method: POST
+              cors: true
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -131,10 +141,10 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
-# package:
-#   exclude:
-#     - layers/**
-#     - node_modules/**
-#     - package*
-#     - .gitignore
-#     - serverless.yml
+package:
+  exclude:
+    - layers/**
+    - node_modules/**
+    - package*
+    - .gitignore
+    - serverless.yml
