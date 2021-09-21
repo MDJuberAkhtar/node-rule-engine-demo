@@ -2,9 +2,10 @@
 const { Engine } = require('json-rules-engine');
 const { getAccountInformation }= require('./userlist/user');
 const Responses = require('./common/API_Responses');
+const fs = require("fs");
+const path = require('path');
 
 module.exports.handler = async (event) => {
-
 
   const engine = new Engine()
 
@@ -34,39 +35,13 @@ module.exports.handler = async (event) => {
         almanac.addRuntimeFact('trueservice', false)
       }
   }
+  engine.addRule(acountCheck);
 
-  engine.addRule(acountCheck)
- 
-    const rewardPointRule = {
-      conditions: {
-        any: [{
-          fact: 'bacthInfo',
-          path: '$.rewardpoint',
-          operator: 'in',
-          value: [100, 200, 300, 400,500, 600, 700, 800, 900]
-        },
-        {
-          fact: 'giftInfo',
-          path: '$.rewardpoint',
-          operator: 'equal',
-          value: 2000
-        },
-        {
-          fact: 'avatarInfo',
-          path: '$.rewardpoint',
-          operator: 'equal',
-          value: 1000
-        },
-        {
-          fact: 'valucherInfo',
-          path: '$.rewardpoint',
-          operator: 'in',
-          value: [500, 1500]
-        }]
-      },
-      event: { type: 'this-reward-point' },
-      priority: 9 
-    }
+  let rawdata = fs.readFileSync(path.resolve(__dirname, 'rules.json'));
+  let rewardPointRule = JSON.parse(rawdata);
+
+  // console.log('this is reward rule:', rewardPointRule)
+
     engine.addRule(rewardPointRule)
   
     engine

@@ -92,6 +92,37 @@ functions:
               path: create-user
               method: POST
               cors: true
+  
+  CreateRule:
+        handler: Rules/createRule.handler
+        layers:
+          - {Ref: MyModulesLambdaLayer}
+        events:
+          - http:
+              path: create-rule
+              method: POST
+              cors: true
+
+  UpdateRule:
+        handler: Rules/updateRule.handler
+        layers:
+          - {Ref: MyModulesLambdaLayer}
+        events:
+          - http:
+              path: update-rule
+              method: POST
+              cors: true
+
+  DeleteRule:
+        handler: Rules/deleteRule.handler
+        layers:
+          - {Ref: MyModulesLambdaLayer}
+        events:
+          - http:
+              path: delete-rule
+              method: DELETE
+              cors: true
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

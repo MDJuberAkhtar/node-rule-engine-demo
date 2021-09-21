@@ -8,6 +8,5 @@ admin.initializeApp({
 });
 
 const database = admin.database();
-const usersRef = database.ref('/users');
-
-module.exports = usersRef
+module.exports.usersRef = database.ref('/users');
+module.exports.rulessRef = database.ref('/rules');

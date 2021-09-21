@@ -1,0 +1,30 @@
+{
+ "conditions":{ 
+    "any": [{
+      "fact": "bacthInfo",
+      "path": "$.rewardpoint",
+      "operator": "in",
+      "value": [100, 200, 300, 400,500, 600, 700, 800, 900]
+    },
+    {
+      "fact": "giftInfo",
+      "path": "$.rewardpoint",
+      "operator": "equal",
+      "value": 2000
+    },
+    {
+      "fact": "avatarInfo",
+      "path": "$.rewardpoint",
+      "operator": "equal",
+      "value": 1000
+    },
+    {
+      "fact": "valucherInfo",
+      "path": "$.rewardpoint",
+      "operator": "in",
+      "value": [500, 1500]
+    }]
+  },
+  "event": { "type": "this-reward-point" },
+  "priority": 9 
+}
