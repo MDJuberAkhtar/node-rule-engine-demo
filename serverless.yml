@@ -110,7 +110,7 @@ functions:
         events:
           - http:
               path: update-rule
-              method: POST
+              method: PUT
               cors: true
 
   DeleteRule:
@@ -121,6 +121,16 @@ functions:
           - http:
               path: delete-rule
               method: DELETE
+              cors: true
+
+  ReadRule:
+        handler: Rules/readRules.handler
+        layers:
+          - {Ref: MyModulesLambdaLayer}
+        events:
+          - http:
+              path: get-rules
+              method: GET
               cors: true
 
 #    The following are a few example events you can configure
