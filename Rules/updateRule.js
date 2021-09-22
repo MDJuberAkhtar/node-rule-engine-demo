@@ -5,8 +5,8 @@ exports.handler = async (event, context, callback) => {
   try {
     const dataEvent = JSON.parse(event.body);
     let message = {}
-    if(dataEvent.id) {
-      const dateRef = rulessRef.child(dataEvent.id);
+    if(dataEvent.factName) {
+      const dateRef = rulessRef.child(dataEvent.factName);
       await dateRef.once('value',(data) => {
         if(data.val()) {
           let newRef = data.val();
@@ -40,12 +40,12 @@ exports.handler = async (event, context, callback) => {
 
            dateRef.update(uppdatedRules);
 
-          message.message = 'loading account information for "' + dataEvent.id + '"';
+          message.message = 'loading account information for "' + dataEvent.factName + '"';
           message.data = uppdatedRules
 
           console.log("Final Message:", message);
         } else {
-          message.message = 'Sorry! Given Rule id do not exists'
+          message.message = 'Sorry! Given fact name do not exists'
         }
       });
 
@@ -54,7 +54,7 @@ exports.handler = async (event, context, callback) => {
         
       console.log('missinging Value:', data);
 
-      return Responses._400({message: "Please give the proper rule id"});
+      return Responses._400({message: "Please give the proper fact name"});
     }
     
   } catch (error) {

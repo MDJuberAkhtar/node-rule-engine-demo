@@ -125,6 +125,12 @@
               "LogGroupName": "/aws/lambda/node-rule-engine-dev-ReadRule"
             }
           },
+          "GetUserLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/node-rule-engine-dev-GetUser"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -224,7 +230,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/node-rule-engine/dev/1632227241047-2021-09-21T12:27:21.047Z/node-rule-engine.zip"
+                "S3Key": "serverless/node-rule-engine/dev/1632303460304-2021-09-22T09:37:40.304Z/node-rule-engine.zip"
               },
               "Handler": "handler.handler",
               "Runtime": "nodejs12.x",
@@ -259,7 +265,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/node-rule-engine/dev/1632227241047-2021-09-21T12:27:21.047Z/node-rule-engine.zip"
+                "S3Key": "serverless/node-rule-engine/dev/1632303460304-2021-09-22T09:37:40.304Z/node-rule-engine.zip"
               },
               "Handler": "insertUser/User.handler",
               "Runtime": "nodejs12.x",
@@ -294,7 +300,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/node-rule-engine/dev/1632227241047-2021-09-21T12:27:21.047Z/node-rule-engine.zip"
+                "S3Key": "serverless/node-rule-engine/dev/1632303460304-2021-09-22T09:37:40.304Z/node-rule-engine.zip"
               },
               "Handler": "Rules/createRule.handler",
               "Runtime": "nodejs12.x",
@@ -329,7 +335,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/node-rule-engine/dev/1632227241047-2021-09-21T12:27:21.047Z/node-rule-engine.zip"
+                "S3Key": "serverless/node-rule-engine/dev/1632303460304-2021-09-22T09:37:40.304Z/node-rule-engine.zip"
               },
               "Handler": "Rules/updateRule.handler",
               "Runtime": "nodejs12.x",
@@ -364,7 +370,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/node-rule-engine/dev/1632227241047-2021-09-21T12:27:21.047Z/node-rule-engine.zip"
+                "S3Key": "serverless/node-rule-engine/dev/1632303460304-2021-09-22T09:37:40.304Z/node-rule-engine.zip"
               },
               "Handler": "Rules/deleteRule.handler",
               "Runtime": "nodejs12.x",
@@ -399,7 +405,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/node-rule-engine/dev/1632227241047-2021-09-21T12:27:21.047Z/node-rule-engine.zip"
+                "S3Key": "serverless/node-rule-engine/dev/1632303460304-2021-09-22T09:37:40.304Z/node-rule-engine.zip"
               },
               "Handler": "Rules/readRules.handler",
               "Runtime": "nodejs12.x",
@@ -427,64 +433,109 @@
               "ReadRuleLogGroup"
             ]
           },
-          "HelloLambdaVersionv98Y7okY8CoI0a8nF0D3rjNqVF46VkDQDdtsKZR9Y": {
+          "GetUserLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/node-rule-engine/dev/1632303460304-2021-09-22T09:37:40.304Z/node-rule-engine.zip"
+              },
+              "Handler": "Rules/getUsers.handler",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "node-rule-engine-dev-GetUser",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "NODE_PATH": "./:/opt/node_modules"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Layers": [
+                {
+                  "Ref": "MyModulesLambdaLayer"
+                }
+              ]
+            },
+            "DependsOn": [
+              "GetUserLogGroup"
+            ]
+          },
+          "HelloLambdaVersionH8UEhusxq6CU1UCbrKkB5kZUi2J7NTHjZIk9oyITY9E": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "HelloLambdaFunction"
               },
-              "CodeSha256": "PnkqsKH6wTPela+GDBDNlwQQrmmaYina4DcaZJ4Cgk4="
+              "CodeSha256": "Yo4AZOocpeOk8PKVxzIos2gLgme+FVYT7VzfdttuDRk="
             }
           },
-          "UserLambdaVersionesTyIPT66Fbp22QXYw0lHM6pxF1BTVVTwX9gZYoiM": {
+          "UserLambdaVersionUYQm5YartW2cz3qjhtM5AilP3mqUduXzdA0UXiQDesU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UserLambdaFunction"
               },
-              "CodeSha256": "PnkqsKH6wTPela+GDBDNlwQQrmmaYina4DcaZJ4Cgk4="
+              "CodeSha256": "Yo4AZOocpeOk8PKVxzIos2gLgme+FVYT7VzfdttuDRk="
             }
           },
-          "CreateRuleLambdaVersionJ6tjOQJaXgaBFN5Frlv2wQlvYvbiXQF4ilUw2E4dXk": {
+          "CreateRuleLambdaVersionpHsEpWRpE4Jw3eIkBaH5tmvVsuV1bFGIgKBuUni6NJQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateRuleLambdaFunction"
               },
-              "CodeSha256": "PnkqsKH6wTPela+GDBDNlwQQrmmaYina4DcaZJ4Cgk4="
+              "CodeSha256": "Yo4AZOocpeOk8PKVxzIos2gLgme+FVYT7VzfdttuDRk="
             }
           },
-          "UpdateRuleLambdaVersionrlAoqet2oncjCMWKjVPwr0YFQcMiEQZfpUlNC1Bc0E": {
+          "UpdateRuleLambdaVersiondhDTApICOfhJ7RXInMLeoQXKNbo6bBl1T12WjhXvvc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateRuleLambdaFunction"
               },
-              "CodeSha256": "PnkqsKH6wTPela+GDBDNlwQQrmmaYina4DcaZJ4Cgk4="
+              "CodeSha256": "Yo4AZOocpeOk8PKVxzIos2gLgme+FVYT7VzfdttuDRk="
             }
           },
-          "DeleteRuleLambdaVersionPw2FH6wvm7YJv36256ph2aFm643LGMUrJS1pXVEQ": {
+          "DeleteRuleLambdaVersion5vduAboOJhTJ5XDBKcpLr3dwj8VSUGaFqj7ExchAZNc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "DeleteRuleLambdaFunction"
               },
-              "CodeSha256": "PnkqsKH6wTPela+GDBDNlwQQrmmaYina4DcaZJ4Cgk4="
+              "CodeSha256": "Yo4AZOocpeOk8PKVxzIos2gLgme+FVYT7VzfdttuDRk="
             }
           },
-          "ReadRuleLambdaVersionQHIYVmgVfUYqUPAuqowYvmff6rFRhn5Q0m7owDHgZ4": {
+          "ReadRuleLambdaVersionnRH9rUmSqqUopVo2lxBECgzhJjAUqqaeM86eQ9fgI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ReadRuleLambdaFunction"
               },
-              "CodeSha256": "PnkqsKH6wTPela+GDBDNlwQQrmmaYina4DcaZJ4Cgk4="
+              "CodeSha256": "Yo4AZOocpeOk8PKVxzIos2gLgme+FVYT7VzfdttuDRk="
+            }
+          },
+          "GetUserLambdaVersionDSBLcwqCPbllZOGhp2yv0iCx6GQBurJjKnDtQjjbJew": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetUserLambdaFunction"
+              },
+              "CodeSha256": "Yo4AZOocpeOk8PKVxzIos2gLgme+FVYT7VzfdttuDRk="
             }
           },
           "ApiGatewayRestApi": {
@@ -584,6 +635,21 @@
                 ]
               },
               "PathPart": "get-rules",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceGetDashruleDashuser": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "get-rule-user",
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -859,6 +925,51 @@
               }
             }
           },
+          "ApiGatewayMethodGetDashruleDashuserOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceGetDashruleDashuser"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
           "ApiGatewayMethodGetDashuserPost": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
@@ -1117,7 +1228,50 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1632227235369": {
+          "ApiGatewayMethodGetDashruleDashuserPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceGetDashruleDashuser"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "GetUserLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayDeployment1632303454521": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -1132,12 +1286,14 @@
               "ApiGatewayMethodUpdateDashruleOptions",
               "ApiGatewayMethodDeleteDashruleOptions",
               "ApiGatewayMethodGetDashrulesOptions",
+              "ApiGatewayMethodGetDashruleDashuserOptions",
               "ApiGatewayMethodGetDashuserPost",
               "ApiGatewayMethodCreateDashuserPost",
               "ApiGatewayMethodCreateDashrulePost",
               "ApiGatewayMethodUpdateDashrulePut",
               "ApiGatewayMethodDeleteDashruleDelete",
-              "ApiGatewayMethodGetDashrulesGet"
+              "ApiGatewayMethodGetDashrulesGet",
+              "ApiGatewayMethodGetDashruleDashuserPost"
             ]
           },
           "HelloLambdaPermissionApiGateway": {
@@ -1361,6 +1517,43 @@
                 ]
               }
             }
+          },
+          "GetUserLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetUserLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
           }
         },
         "Outputs": {
@@ -1386,37 +1579,43 @@
           "HelloLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersionv98Y7okY8CoI0a8nF0D3rjNqVF46VkDQDdtsKZR9Y"
+              "Ref": "HelloLambdaVersionH8UEhusxq6CU1UCbrKkB5kZUi2J7NTHjZIk9oyITY9E"
             }
           },
           "UserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UserLambdaVersionesTyIPT66Fbp22QXYw0lHM6pxF1BTVVTwX9gZYoiM"
+              "Ref": "UserLambdaVersionUYQm5YartW2cz3qjhtM5AilP3mqUduXzdA0UXiQDesU"
             }
           },
           "CreateRuleLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateRuleLambdaVersionJ6tjOQJaXgaBFN5Frlv2wQlvYvbiXQF4ilUw2E4dXk"
+              "Ref": "CreateRuleLambdaVersionpHsEpWRpE4Jw3eIkBaH5tmvVsuV1bFGIgKBuUni6NJQ"
             }
           },
           "UpdateRuleLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateRuleLambdaVersionrlAoqet2oncjCMWKjVPwr0YFQcMiEQZfpUlNC1Bc0E"
+              "Ref": "UpdateRuleLambdaVersiondhDTApICOfhJ7RXInMLeoQXKNbo6bBl1T12WjhXvvc"
             }
           },
           "DeleteRuleLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "DeleteRuleLambdaVersionPw2FH6wvm7YJv36256ph2aFm643LGMUrJS1pXVEQ"
+              "Ref": "DeleteRuleLambdaVersion5vduAboOJhTJ5XDBKcpLr3dwj8VSUGaFqj7ExchAZNc"
             }
           },
           "ReadRuleLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ReadRuleLambdaVersionQHIYVmgVfUYqUPAuqowYvmff6rFRhn5Q0m7owDHgZ4"
+              "Ref": "ReadRuleLambdaVersionnRH9rUmSqqUopVo2lxBECgzhJjAUqqaeM86eQ9fgI"
+            }
+          },
+          "GetUserLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetUserLambdaVersionDSBLcwqCPbllZOGhp2yv0iCx6GQBurJjKnDtQjjbJew"
             }
           },
           "ServiceEndpoint": {
@@ -1572,7 +1771,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "HelloLambdaVersionv98Y7okY8CoI0a8nF0D3rjNqVF46VkDQDdtsKZR9Y"
+        "versionLogicalId": "HelloLambdaVersionH8UEhusxq6CU1UCbrKkB5kZUi2J7NTHjZIk9oyITY9E"
       },
       "User": {
         "handler": "insertUser/User.handler",
@@ -1613,7 +1812,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "UserLambdaVersionesTyIPT66Fbp22QXYw0lHM6pxF1BTVVTwX9gZYoiM"
+        "versionLogicalId": "UserLambdaVersionUYQm5YartW2cz3qjhtM5AilP3mqUduXzdA0UXiQDesU"
       },
       "CreateRule": {
         "handler": "Rules/createRule.handler",
@@ -1654,7 +1853,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "CreateRuleLambdaVersionJ6tjOQJaXgaBFN5Frlv2wQlvYvbiXQF4ilUw2E4dXk"
+        "versionLogicalId": "CreateRuleLambdaVersionpHsEpWRpE4Jw3eIkBaH5tmvVsuV1bFGIgKBuUni6NJQ"
       },
       "UpdateRule": {
         "handler": "Rules/updateRule.handler",
@@ -1695,7 +1894,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "UpdateRuleLambdaVersionrlAoqet2oncjCMWKjVPwr0YFQcMiEQZfpUlNC1Bc0E"
+        "versionLogicalId": "UpdateRuleLambdaVersiondhDTApICOfhJ7RXInMLeoQXKNbo6bBl1T12WjhXvvc"
       },
       "DeleteRule": {
         "handler": "Rules/deleteRule.handler",
@@ -1736,7 +1935,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "DeleteRuleLambdaVersionPw2FH6wvm7YJv36256ph2aFm643LGMUrJS1pXVEQ"
+        "versionLogicalId": "DeleteRuleLambdaVersion5vduAboOJhTJ5XDBKcpLr3dwj8VSUGaFqj7ExchAZNc"
       },
       "ReadRule": {
         "handler": "Rules/readRules.handler",
@@ -1777,7 +1976,48 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "ReadRuleLambdaVersionQHIYVmgVfUYqUPAuqowYvmff6rFRhn5Q0m7owDHgZ4"
+        "versionLogicalId": "ReadRuleLambdaVersionnRH9rUmSqqUopVo2lxBECgzhJjAUqqaeM86eQ9fgI"
+      },
+      "GetUser": {
+        "handler": "Rules/getUsers.handler",
+        "layers": {
+          "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"GetUserLambdaFunction\"][\"Properties\"][\"Layers\"]"
+        },
+        "events": [
+          {
+            "http": {
+              "path": "get-rule-user",
+              "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "node-rule-engine-dev-GetUser",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {},
+        "versionLogicalId": "GetUserLambdaVersionDSBLcwqCPbllZOGhp2yv0iCx6GQBurJjKnDtQjjbJew"
       }
     },
     "configValidationMode": "warn",
@@ -1820,14 +2060,14 @@
           "serverless.yml"
         ],
         "artifact": "/home/mobiotics_akhtar/akhtar/node-rule-engine/.serverless/node-rule-engine.zip",
-        "artifactDirectoryName": "serverless/node-rule-engine/dev/1632227241047-2021-09-21T12:27:21.047Z"
+        "artifactDirectoryName": "serverless/node-rule-engine/dev/1632303460304-2021-09-22T09:37:40.304Z"
       }
     },
     "isDashboardMonitoringPreconfigured": false,
     "artifact": "/home/mobiotics_akhtar/akhtar/node-rule-engine/.serverless/node-rule-engine.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/node-rule-engine/dev/1632227241047-2021-09-21T12:27:21.047Z",
+    "artifactDirectoryName": "serverless/node-rule-engine/dev/1632303460304-2021-09-22T09:37:40.304Z",
     "artifact": "node-rule-engine.zip"
   }
 }

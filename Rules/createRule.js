@@ -6,10 +6,10 @@ exports.handler = async (event, context, callback) => {
     const dataEvent = JSON.parse(event.body);
     let messageData = {}
 
-    let { factName, targetfield, operator, value, eventName, message, priority, id} = dataEvent;
+    let { factName, targetfield, operator, value, eventName, message} = dataEvent;
 
-    if(factName && targetfield && operator && value && eventName && message && priority && id) {
-      const dataRef = rulessRef.child(id);
+    if(factName && targetfield && operator && value && eventName && message) {
+      const dataRef = rulessRef.child(factName);
       await dataRef.once('value',(data) => {
         if(!data.val()) {
           let newRules = {
@@ -27,16 +27,16 @@ exports.handler = async (event, context, callback) => {
                 "message": `${message}`
               }
             },
-            "priority": priority
+            "priority": dataEvent.priority ? dataEvent.priority : 1
            }
           messageData.message = 'Rule creation has been Successfull!'
           console.log('new rules:', newRules);
 
-          rulessRef.child(id).set(newRules);
+          rulessRef.child(factName).set(newRules);
 
         } else {
 
-          messageData.message = 'Rule id Already exists!'
+          messageData.message = 'fact Already exists!'
           
         }
       });

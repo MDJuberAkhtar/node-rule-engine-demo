@@ -16,7 +16,6 @@ module.exports = {
       const message = 'loading account information for "' + newRef.name + '"'
       console.log(message);
       });
-      console.log('this is type:', finalData)
       return finalData
     // });
   }

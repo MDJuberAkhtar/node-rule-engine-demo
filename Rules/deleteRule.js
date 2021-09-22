@@ -6,14 +6,14 @@ exports.handler = async (event, context, callback) => {
     const dataEvent = JSON.parse(event.body);
     let messageData = {}
 
-    let { id } = dataEvent;
+    let { factName } = dataEvent;
 
-    if(id) {
-      const dataRef = rulessRef.child(id);
+    if(factName) {
+      const dataRef = rulessRef.child(factName);
       await dataRef.once('value',(data) => {
         if(data.val()) {
 
-         rulessRef.child(id).remove();
+         rulessRef.child(factName).remove();
 
          messageData.message = 'Data has been deleted SUccesfully!'
 
