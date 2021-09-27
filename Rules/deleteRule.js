@@ -1,5 +1,9 @@
 const { rulessRef } = require('../config/firebase');
 const Responses = require('../common/API_Responses');
+const fs = require('fs');
+const path = require('path');
+
+
 
 exports.handler = async (event, context, callback) => {
   try {
@@ -15,11 +19,18 @@ exports.handler = async (event, context, callback) => {
 
          rulessRef.child(factName).remove();
 
+         fs.unlink(path.resolve(`${__dirname}/JsonRuleFiles`, `${factName}.json`), (err => {
+          if (err) console.log(err);
+          else {
+            console.log(`Deleted ${factName} file`);
+          }
+         }));
+         
          messageData.message = 'Data has been deleted SUccesfully!'
 
         } else {
 
-          messageData.message = 'Id do not exits '
+          messageData.message = 'fact rule do not exits '
           
         }
       });
@@ -29,12 +40,12 @@ exports.handler = async (event, context, callback) => {
     } else {
 
       console.log('MIssing Value:', data);
-      return Responses._400({message: "Please provide an id"});
+      return Responses._400({message: "Please provide an fact"});
     }
     
   } catch (error) {
     console.log('This is Rule Created Error:', error);
-    return Responses._400({message: "Please provide an id"});
+    return Responses._400({message: "Please provide an fact"});
   }
 
 

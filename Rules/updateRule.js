@@ -1,51 +1,50 @@
 const { rulessRef } = require('../config/firebase');
 const Responses = require('../common/API_Responses');
+const fs = require('fs');
+const path = require('path');
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
   try {
     const dataEvent = JSON.parse(event.body);
     let message = {}
-    if(dataEvent.factName) {
-      const dateRef = rulessRef.child(dataEvent.factName);
+    if(dataEvent.name) {
+      const dateRef = rulessRef.child(dataEvent.name);
       await dateRef.once('value',(data) => {
         if(data.val()) {
           let newRef = data.val();
 
-          let conditionCheck = newRef["conditions"]["all"][0];
-          let factNameCheck = conditionCheck["fact"];
-          let pathCheck = conditionCheck["path"];
-          let operatorCheck = conditionCheck["operator"];
-          let valueCheck = conditionCheck["value"];
-          let eventNameCheck = newRef["event"]["type"];
-          let messageCheck = newRef["event"]["params"]["message"];
-          let priorityCheck = newRef["priority"];
-  
-          let uppdatedRules = {
-             "conditions":{ 
-               "all": [{
-                "fact": `${dataEvent.factName ? dataEvent.factName : factNameCheck}`,
-               //   "path": `$.${data.targetfield ? data.targetfield : pathCheck}`,
-               "operator": `${dataEvent.operator ? dataEvent.operator : operatorCheck}`,
-               "value": dataEvent.value ? dataEvent.value : valueCheck
-              }]
-            },
-            "event": { 
-             "type": `${dataEvent.eventName ? dataEvent.eventName : eventNameCheck}`,
-             "params": {
-             "message": `${dataEvent.message ? dataEvent.message : messageCheck}`
-            }
-           },
-           "priority": dataEvent.priority ? dataEvent.priority : priorityCheck
+          let attributeCheck = newRef['attributes'];
+          let decisionsCheck = newRef['decisions'][0];
+
+          if(dataEvent.attributes) {
+            attributeCheck = `${dataEvent.attributes}`;
+          }
+          if(dataEvent.decisions) {
+            decisionsCheck = `${dataEvent.decisions}`;
           }
 
-           dateRef.update(uppdatedRules);
+          // console.log('hi saya:', attributeCheck, )
+  
+          let uppdatedRules = {}
+          uppdatedRules.name = dataEvent.name;
+          uppdatedRules.attributes = JSON.parse(attributeCheck);
+          uppdatedRules.decisions = JSON.parse(decisionsCheck);
 
-          message.message = 'loading account information for "' + dataEvent.factName + '"';
+          fs.writeFile(path.resolve(`${__dirname}/JsonRuleFiles`, `${dataEvent.name}.json`), JSON.stringify(uppdatedRules), 'utf8', (err => {
+            if (err) console.log('Json File Update Error:',err);
+            else {
+              console.log(`${dataEvent.name} file Updated`);
+            }
+          }));
+
+          dateRef.update(uppdatedRules);
+
+          message.message = 'loading rule information for "' + dataEvent.name + '"';
           message.data = uppdatedRules
 
           console.log("Final Message:", message);
         } else {
-          message.message = 'Sorry! Given fact name do not exists'
+          message.message = 'Sorry! Given rule name do not exists'
         }
       });
 
@@ -54,12 +53,12 @@ exports.handler = async (event, context, callback) => {
         
       console.log('missinging Value:', data);
 
-      return Responses._400({message: "Please give the proper fact name"});
+      return Responses._400({message: "Please give the proper rule name"});
     }
     
   } catch (error) {
     console.log('This is Rule Created Error:', error);
-    return Responses._400({message: "Please provide proper rule id"});
+    return Responses._400({message: "Please provide proper rule name"});
   }
 
 

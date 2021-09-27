@@ -4,115 +4,104 @@ const { getAccountInformation }= require('../userlist/user');
 const Responses = require('../common/API_Responses');
 const fs = require("fs");
 const { rulessRef } = require('../config/firebase');
+const { usersRef } = require('../config/firebase');
 const path = require('path');
 
 module.exports.handler = async (event) => {
 
-  const data = JSON.parse(event.body)
+  const data = JSON.parse(event.body);
 
-  const engine = new Engine()
+  let rawdata = fs.readFileSync(path.resolve(`${__dirname}/JsonRuleFiles`, `${data.rule}.json`));
+  let decisionData = JSON.parse(rawdata);
+  let arrtibuteData = decisionData['attributes'];
+  let factNameData = arrtibuteData.map(name => name.name);
+  const accountInfo = await getAccountInformation(data.name);
+  
+  // console.log('account info:', accountInfo.achivements)
+
+  const engine = new Engine();
 
   const acountCheck = {
       conditions: {
         all: [{
-          fact: 'videoswatched',
-          path: '$.videoswatched',
-          operator: 'greaterThanInclusive',
-          value: 80
+          fact: 'rulename',
+          operator: 'notIn',
+          value: accountInfo.achivements
         }]
       },
-      event: { type: 'video-watched' },
+      event: { type: 'eligblity' },
       priority: 10, 
       onSuccess: async function (event, almanac) {
-        const accountId = await almanac.factValue('accountId')
-        const accountInfo = await getAccountInformation(accountId)
-        almanac.addRuntimeFact(`${data.factName}`, accountInfo)
-        return console.log('Congratulations! you have earned 5 reward points')
+        const accountId = await almanac.factValue('accountId');
+
+        factNameData.forEach(element => {
+          almanac.addRuntimeFact(`${element}`, accountInfo);
+        });
+
+        return console.log('Congratulations! you have earned 5 reward points');
       },
       onFailure: function (event, almanac) {
-        almanac.addRuntimeFact('trueservice', false)
+        factNameData.forEach(element => {
+          almanac.addRuntimeFact(`${element}`, accountInfo);
+        });
+        return console.log('Sorry! You have already claimed the reward');
       }
   }
   engine.addRule(acountCheck);
 
-  let finalData = {};
-  if(data.factName) {
-    const dateRef = rulessRef.child(data.factName);
-    await dateRef.once('value',(data) => {
-      if(data.val()) {
-        let newRef = data.val();
-        finalData = JSON.parse(JSON.stringify(newRef));
-      } 
-    });
+  let rewardPointRule = decisionData["decisions"][0];
 
-  }
+  // console.log('this is reward:', rewardPointRule)
 
 
-//   console.log('this is reward rule:', finalData)
-
-    engine.addRule(finalData)
+  engine.addRule(rewardPointRule)
   
     engine
       .on('success', async (event, almanac) => {
-        const accountInfo = await almanac.factValue(`${data.factName}`);
-        const accountId = await almanac.factValue('accountId');
-        let totalreward = accountInfo.rewardpoint ? (accountInfo.rewardpoint) : 0;
-        console.log('totalreward:', totalreward)
-        
-        if (totalreward == 2000) {
-          return console.log(` Congratulations! ${accountId} ,  have won a gift voucher`);
-        }
-        if ((totalreward % 500) == 0 && (totalreward !== 1000)) {
-          return console.log(` Congratulations! ${accountId} , you are  eligible for a new kuku voucher`);
-        }
-
-        if (totalreward == 1000) {
-          return console.log(` Congratulations! ${accountId} ,  have unlocked a new avatar and also won a new kuku vaoucher`);
-        }
-
-        if ((totalreward >= 100) && (totalreward % 100)) {
-          let string = `${accountId} ,  have earned total ${parseInt(totalreward/100)} batches and ${parseInt(totalreward%100)} Points`
-          console.log(string);
-          return string;
-
-        }
+        console.log('success:')
 
       })
       .on('failure', async (event, almanac) => {
-        const accountId = await almanac.factValue('accountId')
-        const accountInfo1 = await almanac.factValue(`${data.factName}`);
-        return console.log(`${accountId} ,  have earned total ${accountInfo1.rewardpoint} points`);
-      })
+        console.log('fail')
+    })
   
-
-    
-
-  let facts = { accountId: data.name, videoswatched: data.video, factname : data.factName}
+  let facts = { accountId: data.name,  rulename : data.rule}
   
   let factResults = await engine.run(facts);
+
   let ruleResults = factResults['almanac']['ruleResults'];
-  console.log('this is reult:', ruleResults)
- 
 
-  if(ruleResults[1].result) {
-    let rewardMessage = ruleResults[1].event.params.message
-    let trueResults = ruleResults[1].conditions.all.filter(condition => condition.result)
-    .map(condition => condition)
-    // console.log('this is true:', rewardMessage)
-    let message = {}
-    message.message = "Congratulations! you have earned 5 reward points"
-    message.rewardpoint = trueResults[0].factResult
-    message.rewardmessage = rewardMessage
-    return Responses._200(message);
-    
+  if(ruleResults[0].result) {
+    if(ruleResults[1].result) {
 
-  }else if(!ruleResults[1].result) {
-    let falseResults = ruleResults[1].conditions.all.filter(condition => !condition.result)
-    .map(condition =>condition.factResult)
+      const dateRef = usersRef.child(data.name);
+        await dateRef.once('value', async() => {
+        const newAchivement = accountInfo.achivements.push(data.rule);
+        // console.log('this is x',accountInfo.achivements, newAchivement);
+        await dateRef.update({ 'achivements': accountInfo.achivements});
+
+      });
+  
+      let rewardMessage = ruleResults[1].event.params.message
+      let message = {}
+      message.rewardmessage = rewardMessage
+      return Responses._200(message);
+    }
+    else if(!ruleResults[1].result) {
+  
+      let message = {}
+      message.message = "Sorry! You are not elegible for the reward";
+      return Responses._200(message);
+  
+    }
+  } 
+
+  if(!(ruleResults[0].result)) {
+
     let message = {}
-    message.message = "Congratulations! you have earned 5 reward points fail"
-    message.rewardpoint = falseResults[0]
+    message.message = "Sorry! You have already claimed the reward";
     return Responses._200(message);
+
   }
  
 };

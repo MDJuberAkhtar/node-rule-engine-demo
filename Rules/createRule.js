@@ -1,42 +1,36 @@
 const { rulessRef } = require('../config/firebase');
 const Responses = require('../common/API_Responses');
+const fs = require('fs');
+const path = require('path');
 
-exports.handler = async (event, context, callback) => {
+
+exports.handler = async (event) => {
   try {
     const dataEvent = JSON.parse(event.body);
     let messageData = {}
 
-    let { factName, targetfield, operator, value, eventName, message} = dataEvent;
+    let { name, attributes, decisions} = dataEvent;
 
-    if(factName && targetfield && operator && value && eventName && message) {
-      const dataRef = rulessRef.child(factName);
+    if( name && attributes && decisions) {
+      const dataRef = rulessRef.child(name);
       await dataRef.once('value',(data) => {
         if(!data.val()) {
-          let newRules = {
-            "conditions":{ 
-                "all": [{
-                  "fact": `${factName}`,
-                  "path": `$.${targetfield}`,
-                  "operator": `${operator}`,
-                  "value": value
-                  }]
-              },
-            "event": { 
-              "type": `${eventName}`,
-              "params": {
-                "message": `${message}`
-              }
-            },
-            "priority": dataEvent.priority ? dataEvent.priority : 1
-           }
+          let newRules = dataEvent
           messageData.message = 'Rule creation has been Successfull!'
           console.log('new rules:', newRules);
 
-          rulessRef.child(factName).set(newRules);
+          fs.writeFile(path.resolve(`${__dirname}/JsonRuleFiles`, `${name}.json`), JSON.stringify(newRules), 'utf8', (err => {
+            if (err) console.log('Json File Creation Error:',err);
+            else {
+              console.log(`${name} file created`);
+            }
+          }));
+          
+          rulessRef.child(name).set(newRules);
 
         } else {
 
-          messageData.message = 'fact Already exists!'
+          messageData.message = 'Rule Already exists!'
           
         }
       });
