@@ -49,9 +49,9 @@ module.exports.handler = async (event) => {
   }
   engine.addRule(acountCheck);
 
-  let rewardPointRule = decisionData["decisions"][0];
+  let rewardPointRule =  decisionData["decisions"][0] ? decisionData["decisions"][0] : decisionData["decisions"];
 
-  // console.log('this is reward:', rewardPointRule)
+  console.log('this is reward:', rewardPointRule)
 
 
   engine.addRule(rewardPointRule)

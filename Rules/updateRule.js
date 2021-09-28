@@ -11,24 +11,27 @@ exports.handler = async (event) => {
       const dateRef = rulessRef.child(dataEvent.name);
       await dateRef.once('value',(data) => {
         if(data.val()) {
+          let finalData = {}
           let newRef = data.val();
+          finalData = JSON.parse(JSON.stringify(newRef))
+          let attributeCheck = finalData['attributes'];
+          let decisionsCheck = finalData['decisions'][0];
 
-          let attributeCheck = newRef['attributes'];
-          let decisionsCheck = newRef['decisions'][0];
+          // console.log('this is arrti:', attributeCheck, decisionsCheck)
 
           if(dataEvent.attributes) {
-            attributeCheck = `${dataEvent.attributes}`;
+            attributeCheck = dataEvent.attributes;
           }
           if(dataEvent.decisions) {
-            decisionsCheck = `${dataEvent.decisions}`;
+            decisionsCheck = dataEvent.decisions[0];
           }
-
-          // console.log('hi saya:', attributeCheck, )
   
           let uppdatedRules = {}
           uppdatedRules.name = dataEvent.name;
-          uppdatedRules.attributes = JSON.parse(attributeCheck);
-          uppdatedRules.decisions = JSON.parse(decisionsCheck);
+          uppdatedRules.attributes = attributeCheck;
+          uppdatedRules.decisions = decisionsCheck;
+
+          // console.log('hi sam:', uppdatedRules)
 
           fs.writeFile(path.resolve(`${__dirname}/JsonRuleFiles`, `${dataEvent.name}.json`), JSON.stringify(uppdatedRules), 'utf8', (err => {
             if (err) console.log('Json File Update Error:',err);

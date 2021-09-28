@@ -212,7 +212,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/node-rule-engine/dev/1632316757770-2021-09-22T13:19:17.770Z/node-rule-engine.zip"
+          "S3Key": "serverless/node-rule-engine/dev/1632747254489-2021-09-27T12:54:14.489Z/node-rule-engine.zip"
         },
         "Handler": "handler.handler",
         "Runtime": "nodejs12.x",
@@ -247,7 +247,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/node-rule-engine/dev/1632316757770-2021-09-22T13:19:17.770Z/node-rule-engine.zip"
+          "S3Key": "serverless/node-rule-engine/dev/1632747254489-2021-09-27T12:54:14.489Z/node-rule-engine.zip"
         },
         "Handler": "insertUser/User.handler",
         "Runtime": "nodejs12.x",
@@ -282,7 +282,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/node-rule-engine/dev/1632316757770-2021-09-22T13:19:17.770Z/node-rule-engine.zip"
+          "S3Key": "serverless/node-rule-engine/dev/1632747254489-2021-09-27T12:54:14.489Z/node-rule-engine.zip"
         },
         "Handler": "Rules/createRule.handler",
         "Runtime": "nodejs12.x",
@@ -317,7 +317,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/node-rule-engine/dev/1632316757770-2021-09-22T13:19:17.770Z/node-rule-engine.zip"
+          "S3Key": "serverless/node-rule-engine/dev/1632747254489-2021-09-27T12:54:14.489Z/node-rule-engine.zip"
         },
         "Handler": "Rules/updateRule.handler",
         "Runtime": "nodejs12.x",
@@ -352,7 +352,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/node-rule-engine/dev/1632316757770-2021-09-22T13:19:17.770Z/node-rule-engine.zip"
+          "S3Key": "serverless/node-rule-engine/dev/1632747254489-2021-09-27T12:54:14.489Z/node-rule-engine.zip"
         },
         "Handler": "Rules/deleteRule.handler",
         "Runtime": "nodejs12.x",
@@ -387,7 +387,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/node-rule-engine/dev/1632316757770-2021-09-22T13:19:17.770Z/node-rule-engine.zip"
+          "S3Key": "serverless/node-rule-engine/dev/1632747254489-2021-09-27T12:54:14.489Z/node-rule-engine.zip"
         },
         "Handler": "Rules/readRules.handler",
         "Runtime": "nodejs12.x",
@@ -422,7 +422,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/node-rule-engine/dev/1632316757770-2021-09-22T13:19:17.770Z/node-rule-engine.zip"
+          "S3Key": "serverless/node-rule-engine/dev/1632747254489-2021-09-27T12:54:14.489Z/node-rule-engine.zip"
         },
         "Handler": "Rules/getUsers.handler",
         "Runtime": "nodejs12.x",
@@ -450,74 +450,74 @@
         "GetUserLogGroup"
       ]
     },
-    "HelloLambdaVersionO5youLSZcpzz7oLcL8mEWV7Ax9vHZF3gCYcZ5tYLc": {
+    "HelloLambdaVersionWQQcHn1E1L36c9tP0Kwd0ZhhugwyqfKOFSQjCb7DA": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HelloLambdaFunction"
         },
-        "CodeSha256": "pG2EL36mxPH1+02QzOghFZkIu7XO3Rn9yPNKi2+foQA="
+        "CodeSha256": "dPlOHmX8H4+a7SxshvUsijsOA+0LkBFM/vnPkPqQzIo="
       }
     },
-    "UserLambdaVersionpTVkrhYHiXVemAN9slzJ8JYy5nw6f2eof9qyH1NGSU": {
+    "UserLambdaVersion5pDg99dWdElYnyGDU75oW4mot4iyqyTr4Gt3ii1Zk": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UserLambdaFunction"
         },
-        "CodeSha256": "pG2EL36mxPH1+02QzOghFZkIu7XO3Rn9yPNKi2+foQA="
+        "CodeSha256": "dPlOHmX8H4+a7SxshvUsijsOA+0LkBFM/vnPkPqQzIo="
       }
     },
-    "CreateRuleLambdaVersionBSGHJ9eoCHgdeFZFnLBbxsHX92FtbaVtkcIL0eS9mrM": {
+    "CreateRuleLambdaVersion5IaTBp1HQ9Emfq3ytyA4ctSpGCUdxhogv29qUhMJNFg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateRuleLambdaFunction"
         },
-        "CodeSha256": "pG2EL36mxPH1+02QzOghFZkIu7XO3Rn9yPNKi2+foQA="
+        "CodeSha256": "dPlOHmX8H4+a7SxshvUsijsOA+0LkBFM/vnPkPqQzIo="
       }
     },
-    "UpdateRuleLambdaVersiongLPFjyDR8dI7prt9MxDKUEoNypfj16F0pO8jq1O6c": {
+    "UpdateRuleLambdaVersionIUvDauPHYujtQJYDeCFUJSOXTGnMmggYnZQIKSOouo": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UpdateRuleLambdaFunction"
         },
-        "CodeSha256": "pG2EL36mxPH1+02QzOghFZkIu7XO3Rn9yPNKi2+foQA="
+        "CodeSha256": "dPlOHmX8H4+a7SxshvUsijsOA+0LkBFM/vnPkPqQzIo="
       }
     },
-    "DeleteRuleLambdaVersion5DdM7mwcjpn3Fdl8g9BnumhUYtIASKfPAe1Cp8": {
+    "DeleteRuleLambdaVersionVQId3jE0VGujPmMwaLs1WjJz3FSd54kwwBez4U": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "DeleteRuleLambdaFunction"
         },
-        "CodeSha256": "pG2EL36mxPH1+02QzOghFZkIu7XO3Rn9yPNKi2+foQA="
+        "CodeSha256": "dPlOHmX8H4+a7SxshvUsijsOA+0LkBFM/vnPkPqQzIo="
       }
     },
-    "ReadRuleLambdaVersionqsm2OgYVOB7DR1ThU4nfVZgiN0pQgeUQfxVH24lXs": {
+    "ReadRuleLambdaVersion15PtxsWxV9uQDttJlyce1f5pS0wyRBnWRD5Rwc2dM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReadRuleLambdaFunction"
         },
-        "CodeSha256": "pG2EL36mxPH1+02QzOghFZkIu7XO3Rn9yPNKi2+foQA="
+        "CodeSha256": "dPlOHmX8H4+a7SxshvUsijsOA+0LkBFM/vnPkPqQzIo="
       }
     },
-    "GetUserLambdaVersionTASVVigYFpjxdj3wLCRS6aesqdZ5NgTbpCJC0QknY": {
+    "GetUserLambdaVersionRSQAj686rk4sIFaOv7ly25ilEKRQOAqQGZydfDM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetUserLambdaFunction"
         },
-        "CodeSha256": "pG2EL36mxPH1+02QzOghFZkIu7XO3Rn9yPNKi2+foQA="
+        "CodeSha256": "dPlOHmX8H4+a7SxshvUsijsOA+0LkBFM/vnPkPqQzIo="
       }
     },
     "ApiGatewayRestApi": {
@@ -1253,7 +1253,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1632316751398": {
+    "ApiGatewayDeployment1632747248506": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1561,43 +1561,43 @@
     "HelloLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HelloLambdaVersionO5youLSZcpzz7oLcL8mEWV7Ax9vHZF3gCYcZ5tYLc"
+        "Ref": "HelloLambdaVersionWQQcHn1E1L36c9tP0Kwd0ZhhugwyqfKOFSQjCb7DA"
       }
     },
     "UserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UserLambdaVersionpTVkrhYHiXVemAN9slzJ8JYy5nw6f2eof9qyH1NGSU"
+        "Ref": "UserLambdaVersion5pDg99dWdElYnyGDU75oW4mot4iyqyTr4Gt3ii1Zk"
       }
     },
     "CreateRuleLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateRuleLambdaVersionBSGHJ9eoCHgdeFZFnLBbxsHX92FtbaVtkcIL0eS9mrM"
+        "Ref": "CreateRuleLambdaVersion5IaTBp1HQ9Emfq3ytyA4ctSpGCUdxhogv29qUhMJNFg"
       }
     },
     "UpdateRuleLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UpdateRuleLambdaVersiongLPFjyDR8dI7prt9MxDKUEoNypfj16F0pO8jq1O6c"
+        "Ref": "UpdateRuleLambdaVersionIUvDauPHYujtQJYDeCFUJSOXTGnMmggYnZQIKSOouo"
       }
     },
     "DeleteRuleLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "DeleteRuleLambdaVersion5DdM7mwcjpn3Fdl8g9BnumhUYtIASKfPAe1Cp8"
+        "Ref": "DeleteRuleLambdaVersionVQId3jE0VGujPmMwaLs1WjJz3FSd54kwwBez4U"
       }
     },
     "ReadRuleLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReadRuleLambdaVersionqsm2OgYVOB7DR1ThU4nfVZgiN0pQgeUQfxVH24lXs"
+        "Ref": "ReadRuleLambdaVersion15PtxsWxV9uQDttJlyce1f5pS0wyRBnWRD5Rwc2dM"
       }
     },
     "GetUserLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetUserLambdaVersionTASVVigYFpjxdj3wLCRS6aesqdZ5NgTbpCJC0QknY"
+        "Ref": "GetUserLambdaVersionRSQAj686rk4sIFaOv7ly25ilEKRQOAqQGZydfDM"
       }
     },
     "ServiceEndpoint": {
