@@ -10,23 +10,44 @@ const path = require('path');
 module.exports.handler = async (event) => {
 
   const data = JSON.parse(event.body);
+  let finalData = {};
+    await rulessRef.once('value',(data) => {
+    let newRef = data.val()
+    finalData = JSON.parse(JSON.stringify(newRef));
+ 
+  });
 
-  let rawdata = fs.readFileSync(path.resolve(`${__dirname}/JsonRuleFiles`, `${data.rule}.json`));
-  let decisionData = JSON.parse(rawdata);
-  let arrtibuteData = decisionData['attributes'];
-  let factNameData = arrtibuteData.map(name => name.name);
+  let AllRule = Object.keys(finalData)
+ 
   const accountInfo = await getAccountInformation(data.name);
+  let achivedRules = accountInfo.achivements;
+  let uncheckRules = [];
+  let uncheckFacts = [];
+  let rewardPointRule = [];
+
+  for (let i = 0; i< AllRule.length; i++) {
+   if(achivedRules.includes(AllRule[i])) {
+     console.log('Rules Already Present:',  AllRule[i])
+   } else{
+    uncheckRules.push(AllRule[i]);
+    let uncheckedarrtibuteData = finalData[AllRule[i]]['attributes'];
+    rewardPointRule.push(finalData[AllRule[i]]['decisions'][0])
+    uncheckFacts.push(uncheckedarrtibuteData.map(name => name.name));
+    }
+  }
+
+  let factNameData = Array.prototype.concat.apply([], uncheckFacts);
   
-  // console.log('account info:', accountInfo.achivements)
+  // console.log('account info:', uncheckRules, factNameData, rewardPointRule)
 
   const engine = new Engine();
 
   const acountCheck = {
       conditions: {
         all: [{
-          fact: 'rulename',
-          operator: 'notIn',
-          value: accountInfo.achivements
+          fact: 'accountId',
+          operator: 'equal',
+          value: data.name
         }]
       },
       event: { type: 'eligblity' },
@@ -49,59 +70,56 @@ module.exports.handler = async (event) => {
   }
   engine.addRule(acountCheck);
 
-  let rewardPointRule =  decisionData["decisions"][0] ? decisionData["decisions"][0] : decisionData["decisions"];
 
-  console.log('this is reward:', rewardPointRule)
-
-
-  engine.addRule(rewardPointRule)
+  rewardPointRule.forEach(val=>{
+    engine.addRule(val)
+  });
   
-    engine
-      .on('success', async (event, almanac) => {
-        console.log('success:')
-
-      })
-      .on('failure', async (event, almanac) => {
-        console.log('fail')
-    })
-  
-  let facts = { accountId: data.name,  rulename : data.rule}
+  let facts = { accountId: data.name}
   
   let factResults = await engine.run(facts);
-
   let ruleResults = factResults['almanac']['ruleResults'];
 
+  console.log('this is result:', ruleResults)
+
   if(ruleResults[0].result) {
-    if(ruleResults[1].result) {
+ 
+    for(let i = 1; i<ruleResults.length; i++) {
 
-      const dateRef = usersRef.child(data.name);
+      if(ruleResults[i].result) {
+        // console.log('this is uncked:', uncheckRules[i-1])
+
+        const dateRef = usersRef.child(data.name);
         await dateRef.once('value', async() => {
-        const newAchivement = accountInfo.achivements.push(data.rule);
-        // console.log('this is x',accountInfo.achivements, newAchivement);
-        await dateRef.update({ 'achivements': accountInfo.achivements});
 
-      });
+         const newAchivement = accountInfo.achivements.push(uncheckRules[i-1]);
+         console.log('this is x',accountInfo.achivements, newAchivement);
+        //  await dateRef.update({ 'achivements': accountInfo.achivements});
+        });
   
-      let rewardMessage = ruleResults[1].event.params.message
-      let message = {}
-      message.rewardmessage = rewardMessage
-      return Responses._200(message);
+       let rewardMessage = ruleResults[i].event.type
+       let message = {}
+       message.rewardmessage = rewardMessage
+       return Responses._200(message);
+
+      } 
     }
-    else if(!ruleResults[1].result) {
-  
-      let message = {}
-      message.message = "Sorry! You are not elegible for the reward";
-      return Responses._200(message);
-  
+
+    for(let i = 1; i<ruleResults.length; i++) {
+
+      if(!(ruleResults[i].result)) {
+        let message = {}
+        message.message = "Sorry! You are not elegible for any reward at the moment";
+        return Responses._200(message);
+
+      } 
+
     }
-  } 
-
-  if(!(ruleResults[0].result)) {
-
+  } else {
+  
     let message = {}
-    message.message = "Sorry! You have already claimed the reward";
+    message.message = "Sorry! You are not elegible for any reward at the moment";
     return Responses._200(message);
-
   }
  
 };

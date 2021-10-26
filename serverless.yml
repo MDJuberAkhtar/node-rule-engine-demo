@@ -29,7 +29,9 @@ provider:
   region: ap-south-1
   environment:
         NODE_PATH: "./:/opt/node_modules"
-
+        DB_USERNMAE: 'root'
+        DB_PASSWD: 'Juber123@99'
+        DB_NAME: 'vboxlite_db'
 
 
 plugins:
@@ -73,16 +75,15 @@ layers:
         - node_modules/**
 
 functions:
-  hello:
-    handler: handler.handler
-    layers:
-      - {Ref: MyModulesLambdaLayer}
-    events:
-      - http:
-          path: get-user
-          method: POST
-          cors: true
-
+  SeeUser:
+        handler: handler.handler
+        layers:
+          - {Ref: MyModulesLambdaLayer}
+        events:
+          - http:
+              path: get-call
+              method: POST
+              cors: true
   User:
         handler: insertUser/User.handler
         layers:
@@ -140,6 +141,27 @@ functions:
         events:
           - http:
               path: get-rule-user
+              method: POST
+              cors: true
+
+  SignUser:
+        handler: Auth/signup.handler
+        layers:
+          - {Ref: MyModulesLambdaLayer}
+        events:
+          - http:
+              path: signup
+              method: POST
+              cors: true
+
+
+  LoginUser:
+        handler: Auth/login.handler
+        layers:
+          - {Ref: MyModulesLambdaLayer}
+        events:
+          - http:
+              path: login
               method: POST
               cors: true
 

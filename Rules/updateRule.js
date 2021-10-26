@@ -15,7 +15,7 @@ exports.handler = async (event) => {
           let newRef = data.val();
           finalData = JSON.parse(JSON.stringify(newRef))
           let attributeCheck = finalData['attributes'];
-          let decisionsCheck = finalData['decisions'][0];
+          let decisionsCheck = finalData['decisions'];
 
           // console.log('this is arrti:', attributeCheck, decisionsCheck)
 
@@ -23,7 +23,7 @@ exports.handler = async (event) => {
             attributeCheck = dataEvent.attributes;
           }
           if(dataEvent.decisions) {
-            decisionsCheck = dataEvent.decisions[0];
+            decisionsCheck = dataEvent.decisions;
           }
   
           let uppdatedRules = {}

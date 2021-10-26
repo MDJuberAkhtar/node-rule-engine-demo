@@ -10,19 +10,19 @@ exports.handler = async (event, context, callback) => {
     const dataEvent = JSON.parse(event.body);
     let messageData = {}
 
-    let { factName } = dataEvent;
+    let { rulename } = dataEvent;
 
-    if(factName) {
-      const dataRef = rulessRef.child(factName);
+    if(rulename) {
+      const dataRef = rulessRef.child(rulename);
       await dataRef.once('value',(data) => {
         if(data.val()) {
 
-         rulessRef.child(factName).remove();
+         rulessRef.child(rulename).remove();
 
-         fs.unlink(path.resolve(`${__dirname}/JsonRuleFiles`, `${factName}.json`), (err => {
+         fs.unlink(path.resolve(`${__dirname}/JsonRuleFiles`, `${rulename}.json`), (err => {
           if (err) console.log(err);
           else {
-            console.log(`Deleted ${factName} file`);
+            console.log(`Deleted ${rulename} file`);
           }
          }));
          
@@ -30,7 +30,7 @@ exports.handler = async (event, context, callback) => {
 
         } else {
 
-          messageData.message = 'fact rule do not exits '
+          messageData.message = 'rule do not exits '
           
         }
       });

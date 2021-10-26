@@ -3,6 +3,22 @@ const Responses = require('../common/API_Responses');
 const fs = require('fs');
 const path = require('path');
 
+//*******************Rule Creation**************************************/
+  // console.log('this is type:', AllRule)
+
+  // let rawdata = fs.readFileSync(path.resolve(`${__dirname}/../temp`, `${data.rule}.json`));
+  // let decisionData = JSON.parse(rawdata);
+  // let arrtibuteData = decisionData['attributes'];
+  // let factNameData = arrtibuteData.map(name => name.name);
+  
+  // fs.writeFile(path.resolve(`${__dirname}/../temp`, `${name}.json`), JSON.stringify(newRules), 'utf8', (err => {
+  //   if (err) console.log('Json File Creation Error:',err);
+  //   else {
+  //     console.log(`${name} file created`);
+  //   }
+  // }));
+//*********************************************************/
+
 
 exports.handler = async (event) => {
   try {
@@ -18,14 +34,6 @@ exports.handler = async (event) => {
           let newRules = dataEvent
           messageData.message = 'Rule creation has been Successfull!'
           console.log('new rules:', newRules);
-
-          fs.writeFile(path.resolve(`${__dirname}/JsonRuleFiles`, `${name}.json`), JSON.stringify(newRules), 'utf8', (err => {
-            if (err) console.log('Json File Creation Error:',err);
-            else {
-              console.log(`${name} file created`);
-            }
-          }));
-          
           rulessRef.child(name).set(newRules);
 
         } else {
